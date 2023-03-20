@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <Title>PiShockApi</Title>
+    <Title>Tueffy.PiShockApi</Title>
     <Authors>Tueffy</Authors>
     <Copyright>Copyright (c) Tueffy 2023</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>

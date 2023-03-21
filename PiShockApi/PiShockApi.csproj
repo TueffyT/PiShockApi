@@ -13,7 +13,7 @@
     <RepositoryUrl>https://github.com/TueffyT</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageId>Tueffy.PiShockApi</PackageId>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Library to easily interact with the PiShock Api.</Description>
   </PropertyGroup>

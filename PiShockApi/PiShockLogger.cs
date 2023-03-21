@@ -16,12 +16,8 @@ namespace PiShockApi {
         }
 
         public static ILogger GetStaticLogger<T>() {
-            if( _loggerFactory is null ) {
-                throw new InvalidOperationException( "StaticLogger is not initialized yet." );
-            }
-
             return _loggerByType
-                .GetOrAdd( typeof( T ), _loggerFactory.CreateLogger<T>() );
+                .GetOrAdd( typeof( T ), _loggerFactory?.CreateLogger<T>() );
         }
     }
 }

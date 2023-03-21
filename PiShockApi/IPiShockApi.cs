@@ -3,7 +3,7 @@ using Refit;
 
 namespace PiShockApi {
     [Headers( "Content-Type: application/json" )]
-    public interface IPiShockApi {
+    internal interface IPiShockApi {
         [Post( "/" )]
         public Task<ApiResponse<string>> SendPiShockCommandAsync( [Body] PiShockRequest request );
     }

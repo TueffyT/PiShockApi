@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using PiShockApi.Enums;
 using PiShockApi.Models;
@@ -6,11 +7,15 @@ using Refit;
 namespace PiShockApi {
     public class PiShockApiClient {
         private readonly IPiShockApi _piShockApi;
-        private readonly ILogger _logger;
-        
-        public PiShockApiClient( IPiShockApi piShockApi, ILogger<PiShockApiClient> logger = null ) {
-            _piShockApi = piShockApi;
-            _logger = logger;
+
+        private ILogger Logger => PiShockLogger.GetStaticLogger<PiShockApiClient>();
+
+        public PiShockApiClient() {
+            _piShockApi = RestService.For<IPiShockApi>( "https://do.pishock.com/api/apioperate" );
+        }
+
+        public PiShockApiClient( ILoggerFactory loggerFactory ) : this() {
+            PiShockLogger.Initialize( loggerFactory );
         }
 
         public string DisplayName {
@@ -28,7 +33,7 @@ namespace PiShockApi {
                 Intensity = intensity,
                 Duration = duration
             };
-            _logger?.LogDebug( "Sending Shock {@Request}", request );
+            Logger?.LogDebug( "Sending Shock {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
             if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
@@ -48,7 +53,7 @@ namespace PiShockApi {
                 Intensity = intensity,
                 Duration = 300
             };
-            _logger?.LogDebug( "Sending Mini-Shock {@Request}", request );
+            Logger?.LogDebug( "Sending Mini-Shock {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
             if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
@@ -68,7 +73,7 @@ namespace PiShockApi {
                 Intensity = intensity,
                 Duration = duration
             };
-            _logger?.LogDebug( "Sending Vibration {@Request}", request );
+            Logger?.LogDebug( "Sending Vibration {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
             if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
@@ -88,7 +93,7 @@ namespace PiShockApi {
                 Intensity = intensity,
                 Duration = duration
             };
-            _logger?.LogDebug( "Sending Beep {@Request}", request );
+            Logger?.LogDebug( "Sending Beep {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request );
 
             if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
@@ -96,6 +101,29 @@ namespace PiShockApi {
             }
 
             return new PiShockResult( false, response.Content );
+        }
+
+        public static class PiShockLogger {
+            private static ILoggerFactory _loggerFactory;
+
+            private static readonly ConcurrentDictionary<Type, ILogger> _loggerByType = new();
+
+            public static void Initialize( ILoggerFactory loggerFactory ) {
+                if( _loggerFactory is not null ) {
+                    throw new InvalidOperationException( "StaticLogger already initialized!" );
+                }
+
+                _loggerFactory = loggerFactory ?? throw new ArgumentNullException( nameof( loggerFactory ) );
+            }
+
+            public static ILogger GetStaticLogger<T>() {
+                if( _loggerFactory is null ) {
+                    throw new InvalidOperationException( "StaticLogger is not initialized yet." );
+                }
+
+                return _loggerByType
+                    .GetOrAdd( typeof( T ), _loggerFactory.CreateLogger<T>() );
+            }
         }
     }
 }

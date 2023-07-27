@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Microsoft.Extensions.Logging;
 using PiShockApi.Enums;
 using PiShockApi.Models;
@@ -8,10 +7,10 @@ namespace PiShockApi {
     public class PiShockApiClient {
         private readonly IPiShockApi _piShockApi;
 
-        private ILogger Logger => PiShockLogger.GetStaticLogger<PiShockApiClient>();
+        private ILogger? Logger => PiShockLogger.GetStaticLogger<PiShockApiClient>();
 
         public PiShockApiClient() {
-            _piShockApi = RestService.For<IPiShockApi>( "https://do.pishock.com/api/apioperate" );
+            _piShockApi = RestService.For<IPiShockApi>( "https://do.pishock.com/api/" );
         }
 
         public string DisplayName {
@@ -19,7 +18,17 @@ namespace PiShockApi {
             set;
         } = "PiShockControl";
 
+        /// <summary>
+        /// Sends a shock command
+        /// </summary>
+        /// <param name="piShockUser">PiShock Credentials</param>
+        /// <param name="intensity">Intensity of the Shock. Range 0-100</param>
+        /// <param name="duration">Duration of the Shock. Values from 1-15 are seconds. Values Above 99 are treated as ms.</param>
+        /// <returns><see cref="PiShockResult"/></returns>
         public async Task<PiShockResult> SendShockAsync( PiShockUser piShockUser, int intensity, int duration ) {
+            ValidateUserAndThrow( piShockUser );
+            ValidateIntensityAndThrow( intensity );
+
             PiShockRequest request = new() {
                 Username = piShockUser.Username,
                 ApiKey = piShockUser.ApiKey,
@@ -36,10 +45,13 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content );
+            return new PiShockResult( false, response.Content! );
         }
 
         public async Task<PiShockResult> SendMiniShockAsync( PiShockUser piShockUser, int intensity ) {
+            ValidateUserAndThrow( piShockUser );
+            ValidateIntensityAndThrow( intensity );
+
             PiShockRequest request = new PiShockRequest {
                 Username = piShockUser.Username,
                 ApiKey = piShockUser.ApiKey,
@@ -56,10 +68,20 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content );
+            return new PiShockResult( false, response.Content! );
         }
 
+        /// <summary>
+        /// Sends a vibration command
+        /// </summary>
+        /// <param name="piShockUser">PiShock Credentials</param>
+        /// <param name="intensity">Intensity of the vibration. Range 0-100</param>
+        /// <param name="duration">Duration of the vibration. Values from 1-15 are seconds. Values Above 99 are treated as ms.</param>
+        /// <returns><see cref="PiShockResult"/></returns>
         public async Task<PiShockResult> SendVibrationAsync( PiShockUser piShockUser, int intensity, int duration ) {
+            ValidateUserAndThrow( piShockUser );
+            ValidateIntensityAndThrow( intensity );
+
             PiShockRequest request = new PiShockRequest {
                 Username = piShockUser.Username,
                 ApiKey = piShockUser.ApiKey,
@@ -76,10 +98,20 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content );
+            return new PiShockResult( false, response.Content! );
         }
 
+        /// <summary>
+        /// Sends a beep command
+        /// </summary>
+        /// <param name="piShockUser">PiShock Credentials</param>
+        /// <param name="intensity">Intensity of the beep. Range 0-100</param>
+        /// <param name="duration">Duration of the beep. Values from 1-15 are seconds. Values Above 99 are treated as ms.</param>
+        /// <returns><see cref="PiShockResult"/></returns>
         public async Task<PiShockResult> SendBeepAsync( PiShockUser piShockUser, int intensity, int duration ) {
+            ValidateUserAndThrow( piShockUser );
+            ValidateIntensityAndThrow( intensity );
+
             PiShockRequest request = new PiShockRequest {
                 Username = piShockUser.Username,
                 ApiKey = piShockUser.ApiKey,
@@ -96,7 +128,47 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content );
+            return new PiShockResult( false, response.Content! );
+        }
+
+        public async Task<PiShockInfoResult?> GetShockerInfoAsync( PiShockUser piShockUser ) {
+            ValidateUserAndThrow( piShockUser );
+
+            PiShockRequest request = new PiShockRequest {
+                Username = piShockUser.Username, ApiKey = piShockUser.ApiKey, Code = piShockUser.Code, Name = DisplayName,
+            };
+            Logger?.LogDebug( "Sending GetInfo {@Request}", request );
+            ApiResponse<PiShockInfoResult> response = await _piShockApi.GetShockerInfoAsync( request );
+
+            if( response.IsSuccessStatusCode ) {
+                return response.Content;
+            }
+
+            return null;
+        }
+
+        private void ValidateUserAndThrow( PiShockUser piShockUser ) {
+            if( piShockUser == null ) {
+                throw new ArgumentNullException( nameof( piShockUser ), "PiShockUser can not be null." );
+            }
+
+            if( string.IsNullOrEmpty( piShockUser.Username ) ) {
+                throw new ArgumentException( "PiShockUser.Username can not be null or empty.", nameof( piShockUser ) );
+            }
+
+            if( string.IsNullOrEmpty( piShockUser.ApiKey ) ) {
+                throw new ArgumentException( "PiShockUser.ApiKey can not be null or empty.", nameof( piShockUser ) );
+            }
+
+            if( string.IsNullOrEmpty( piShockUser.Code ) ) {
+                throw new ArgumentException( "PiShockUser.Code can not be null or empty.", nameof( piShockUser ) );
+            }
+        }
+
+        private void ValidateIntensityAndThrow( int intensity ) {
+            if( intensity < 0 || intensity > 100 ) {
+                throw new ArgumentOutOfRangeException( nameof( intensity ), intensity, "Intensity must be between 0 and 100" );
+            }
         }
     }
 }

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 
 namespace PiShockApi {
     public static class PiShockLogger {
-        private static ILoggerFactory _loggerFactory;
+        private static ILoggerFactory? _loggerFactory;
 
         private static readonly ConcurrentDictionary<Type, ILogger> _loggerByType = new();
 
@@ -17,7 +17,7 @@ namespace PiShockApi {
 
         public static ILogger GetStaticLogger<T>() {
             return _loggerByType
-                .GetOrAdd( typeof( T ), _loggerFactory?.CreateLogger<T>() );
+                .GetOrAdd( typeof( T ), _loggerFactory?.CreateLogger<T>()! );
         }
     }
 }

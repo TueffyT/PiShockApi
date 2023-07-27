@@ -1,22 +1,23 @@
 ﻿namespace PiShockApi.Models {
     public class PiShockUser {
-        public string Username {
+
+        public string? Username {
             get;
             set;
         }
 
-        public string ApiKey {
+        public string? ApiKey {
             get;
             set;
         }
 
-        public string Code {
+        public string? Code {
             get;
             set;
         }
-        
+
         public override string ToString() {
-            return Username;
+            return Username!;
         }
     }
 }

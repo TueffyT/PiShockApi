@@ -2,22 +2,22 @@
 
 namespace PiShockApi.Models {
     public class PiShockRequest {
-        public string Username {
+        public string? Username {
             get;
             set;
         }
 
-        public string ApiKey {
+        public string? ApiKey {
             get;
             set;
         }
 
-        public string Code {
+        public string? Code {
             get;
             set;
         }
 
-        public string Name {
+        public string? Name {
             get;
             set;
         }

@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiShockApi", "PiShockApi\PiShockApi.csproj", "{35EEDEC7-7E65-4DC2-88EE-7C063F3538D8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiShockApi.Tests", "PiShockApi.Tests\PiShockApi.Tests.csproj", "{0FB12866-26E9-4BFE-B8AC-31610B4A56B9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{35EEDEC7-7E65-4DC2-88EE-7C063F3538D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35EEDEC7-7E65-4DC2-88EE-7C063F3538D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35EEDEC7-7E65-4DC2-88EE-7C063F3538D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FB12866-26E9-4BFE-B8AC-31610B4A56B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FB12866-26E9-4BFE-B8AC-31610B4A56B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FB12866-26E9-4BFE-B8AC-31610B4A56B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FB12866-26E9-4BFE-B8AC-31610B4A56B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

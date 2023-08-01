@@ -1,7 +1,10 @@
+using System.Reflection;
 using Microsoft.Extensions.Logging;
 using PiShockApi.Enums;
 using PiShockApi.Models;
 using Refit;
+
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo( "PiShockApi.Tests" )]
 
 namespace PiShockApi {
     public class PiShockApiClient {
@@ -147,7 +150,7 @@ namespace PiShockApi {
             return null;
         }
 
-        private void ValidateUserAndThrow( PiShockUser piShockUser ) {
+        internal void ValidateUserAndThrow( PiShockUser piShockUser ) {
             if( piShockUser == null ) {
                 throw new ArgumentNullException( nameof( piShockUser ), "PiShockUser can not be null." );
             }
@@ -165,7 +168,7 @@ namespace PiShockApi {
             }
         }
 
-        private void ValidateIntensityAndThrow( int intensity ) {
+        internal void ValidateIntensityAndThrow( int intensity ) {
             if( intensity < 0 || intensity > 100 ) {
                 throw new ArgumentOutOfRangeException( nameof( intensity ), intensity, "Intensity must be between 0 and 100" );
             }

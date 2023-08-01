@@ -12,7 +12,7 @@ public class ValidateUserTest {
         };
         yield return new object[] {
             new PiShockUser() {
-                ApiKey = "123", Code = "abcd"
+                ApiKey = "123", Code = "Code123"
             }
         };
         yield return new object[] {
@@ -24,21 +24,21 @@ public class ValidateUserTest {
 
     [Fact]
     public void TestThrowInvalidUserWhenNull() {
-        PiShockApiClient apiClient = new PiShockApiClient();
+        PiShockApiClient apiClient = new();
         Assert.Throws<ArgumentNullException>( () => apiClient.ValidateUserAndThrow( null ) );
     }
 
     [Theory]
     [MemberData( nameof( GetTestUsers ) )]
     public void TestThrowInvalidUserWhenInvalid( PiShockUser user ) {
-        PiShockApiClient apiClient = new PiShockApiClient();
+        PiShockApiClient apiClient = new();
         Assert.Throws<ArgumentException>( () => apiClient.ValidateUserAndThrow( user ) );
     }
 
     [Fact]
     public void TestValidUser() {
-        PiShockApiClient apiClient = new PiShockApiClient();
-        var ex = Record.Exception( () => apiClient.ValidateUserAndThrow( new PiShockUser() {
+        PiShockApiClient apiClient = new();
+        Exception? ex = Record.Exception( () => apiClient.ValidateUserAndThrow( new PiShockUser() {
             ApiKey = "123", Code = "Code123", Username = "TestUsername"
         } ) );
         Assert.Null( ex );

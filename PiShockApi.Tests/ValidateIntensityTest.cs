@@ -6,8 +6,8 @@
         [InlineData( 100 )]
         [InlineData( 0 )]
         public void ValidateValidIntensity( int intensity ) {
-            PiShockApiClient apiClient = new PiShockApiClient();
-            var ex = Record.Exception( () => apiClient.ValidateIntensityAndThrow( intensity ) );
+            PiShockApiClient apiClient = new();
+            Exception? ex = Record.Exception( () => apiClient.ValidateIntensityAndThrow( intensity ) );
             Assert.Null( ex );
         }
 
@@ -17,7 +17,7 @@
         [InlineData( -10 )]
         [InlineData( 101 )]
         public void ValidateInvalidIntensity( int intensity ) {
-            PiShockApiClient apiClient = new PiShockApiClient();
+            PiShockApiClient apiClient = new();
             Assert.Throws<ArgumentOutOfRangeException>( () => apiClient.ValidateIntensityAndThrow( intensity ) );
         }
     }

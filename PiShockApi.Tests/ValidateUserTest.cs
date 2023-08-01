@@ -1,6 +1,6 @@
 namespace PiShockApi.Tests;
 
-public class ValidateUserTest {
+public class ValidateUserTest : IClassFixture<PiShockFixture> {
     public static IEnumerable<object[]> GetTestUsers() {
         yield return new object[] {
             new PiShockUser()
@@ -27,23 +27,26 @@ public class ValidateUserTest {
         };
     }
 
+    private PiShockFixture _piShockFixture;
+
+    public ValidateUserTest( PiShockFixture piShockFixture ) {
+        _piShockFixture = piShockFixture;
+    }
+    
     [Fact]
     public void TestThrowInvalidUserWhenNull() {
-        PiShockApiClient apiClient = new();
-        Assert.Throws<ArgumentNullException>( () => apiClient.ValidateUserAndThrow( null ) );
+        Assert.Throws<ArgumentNullException>( () => _piShockFixture.ApiClient.ValidateUserAndThrow( null ) );
     }
 
     [Theory]
     [MemberData( nameof( GetTestUsers ) )]
     public void TestThrowInvalidUserWhenInvalid( PiShockUser user ) {
-        PiShockApiClient apiClient = new();
-        Assert.Throws<ArgumentException>( () => apiClient.ValidateUserAndThrow( user ) );
+        Assert.Throws<ArgumentException>( () => _piShockFixture.ApiClient.ValidateUserAndThrow( user ) );
     }
 
     [Fact]
     public void TestValidUser() {
-        PiShockApiClient apiClient = new();
-        Exception? ex = Record.Exception( () => apiClient.ValidateUserAndThrow( new PiShockUser() {
+        Exception? ex = Record.Exception( () => _piShockFixture.ApiClient.ValidateUserAndThrow( new PiShockUser() {
             ApiKey = "123", Code = "Code123", Username = "TestUsername"
         } ) );
         Assert.Null( ex );

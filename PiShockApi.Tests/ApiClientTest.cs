@@ -35,5 +35,12 @@ namespace PiShockApi.Tests {
             PiShockResult result = await _piShockFixture.ApiClient.SendBeepAsync( _piShockFixture.PiShockUser, 10, 3 );
             Assert.True( result.IsSuccessful, result.Message );
         }
+
+        [Fact]
+        public async Task GetInfoTestValid() {
+            await Task.Delay( 500 );
+            PiShockInfoResult? result = await _piShockFixture.ApiClient.GetShockerInfoAsync( _piShockFixture.PiShockUser );
+            Assert.NotNull( result );
+        }
     }
 }

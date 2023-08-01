@@ -20,6 +20,11 @@ public class ValidateUserTest {
                 ApiKey = "123", Username = "TestUsername"
             }
         };
+        yield return new object[] {
+            new PiShockUser() {
+                Code = "123", Username = "TestUsername"
+            }
+        };
     }
 
     [Fact]

@@ -10,10 +10,10 @@
     <RepositoryUrl>https://github.com/TueffyT</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageId>Tueffy.PiShockApi</PackageId>
-    <Version>1.3.0</Version>
+    <Version>1.3.1</Version>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Description>Library to easily interact with the PiShock Api.</Description>
-    <TargetFrameworks>net7.0;netstandard2.0;netstandard2.1;net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;netstandard2.0;netstandard2.1;net462;net472;net48</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>

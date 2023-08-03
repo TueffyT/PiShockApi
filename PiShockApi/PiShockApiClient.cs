@@ -1,4 +1,6 @@
+using System;
 using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PiShockApi.Enums;
 using PiShockApi.Models;
@@ -10,7 +12,7 @@ namespace PiShockApi {
     public class PiShockApiClient {
         private readonly IPiShockApi _piShockApi;
 
-        private ILogger? Logger => PiShockLogger.GetStaticLogger<PiShockApiClient>();
+        private ILogger Logger => PiShockLogger.GetStaticLogger<PiShockApiClient>();
 
         public PiShockApiClient() {
             _piShockApi = RestService.For<IPiShockApi>( "https://do.pishock.com/api/" );
@@ -32,7 +34,7 @@ namespace PiShockApi {
             ValidateUserAndThrow( piShockUser );
             ValidateIntensityAndThrow( intensity );
 
-            PiShockRequest request = new() {
+            PiShockRequest request = new PiShockRequest() {
                 Username = piShockUser.Username,
                 ApiKey = piShockUser.ApiKey,
                 Code = piShockUser.Code,
@@ -48,7 +50,7 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content! );
+            return new PiShockResult( false, response.Content );
         }
 
         public async Task<PiShockResult> SendMiniShockAsync( PiShockUser piShockUser, int intensity ) {
@@ -71,7 +73,7 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content! );
+            return new PiShockResult( false, response.Content );
         }
 
         /// <summary>
@@ -101,7 +103,7 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content! );
+            return new PiShockResult( false, response.Content );
         }
 
         /// <summary>
@@ -131,10 +133,10 @@ namespace PiShockApi {
                 return new PiShockResult( true, response.Content );
             }
 
-            return new PiShockResult( false, response.Content! );
+            return new PiShockResult( false, response.Content );
         }
 
-        public async Task<PiShockInfoResult?> GetShockerInfoAsync( PiShockUser piShockUser ) {
+        public async Task<PiShockInfoResult> GetShockerInfoAsync( PiShockUser piShockUser ) {
             ValidateUserAndThrow( piShockUser );
 
             PiShockRequest request = new PiShockRequest {

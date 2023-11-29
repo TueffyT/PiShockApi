@@ -46,13 +46,21 @@ namespace PiShockApi {
             Logger?.LogDebug( "Sending Shock {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
-            if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
+            if( response.IsSuccessStatusCode &&
+                (response.Content == PiShockResponseMessages.Success || response.Content == PiShockResponseMessages.Attempt) ) {
                 return new PiShockResult( true, response.Content );
             }
 
             return new PiShockResult( false, response.Content );
         }
 
+
+        /// <summary>
+        /// Sends a MiniShock/Zapp command
+        /// </summary>
+        /// <param name="piShockUser">PiShock Credentials</param>
+        /// <param name="intensity">Intensity of the Shock. Range 0-100</param>
+        /// <returns><see cref="PiShockResult"/></returns>
         public async Task<PiShockResult> SendMiniShockAsync( PiShockUser piShockUser, int intensity ) {
             ValidateUserAndThrow( piShockUser );
             ValidateIntensityAndThrow( intensity );
@@ -69,7 +77,8 @@ namespace PiShockApi {
             Logger?.LogDebug( "Sending Mini-Shock {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
-            if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
+            if( response.IsSuccessStatusCode &&
+                (response.Content == PiShockResponseMessages.Success || response.Content == PiShockResponseMessages.Attempt) ) {
                 return new PiShockResult( true, response.Content );
             }
 
@@ -99,7 +108,8 @@ namespace PiShockApi {
             Logger?.LogDebug( "Sending Vibration {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request ).ConfigureAwait( false );
 
-            if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
+            if( response.IsSuccessStatusCode &&
+                (response.Content == PiShockResponseMessages.Success || response.Content == PiShockResponseMessages.Attempt) ) {
                 return new PiShockResult( true, response.Content );
             }
 
@@ -129,13 +139,19 @@ namespace PiShockApi {
             Logger?.LogDebug( "Sending Beep {@Request}", request );
             ApiResponse<string> response = await _piShockApi.SendPiShockCommandAsync( request );
 
-            if( response.IsSuccessStatusCode && response.Content == "Operation Succeeded." ) {
+            if( response.IsSuccessStatusCode && (response.Content == PiShockResponseMessages.Success || response.Content == PiShockResponseMessages.Attempt) ) {
                 return new PiShockResult( true, response.Content );
             }
 
             return new PiShockResult( false, response.Content );
         }
 
+
+        /// <summary>
+        /// Gets Information about a shocker
+        /// </summary>
+        /// <param name="piShockUser">PiShock Credentials</param>
+        /// <returns><see cref="PiShockResult"/></returns>
         public async Task<PiShockInfoResult> GetShockerInfoAsync( PiShockUser piShockUser ) {
             ValidateUserAndThrow( piShockUser );
 

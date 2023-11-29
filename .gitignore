@@ -4,6 +4,9 @@ obj/
 riderModule.iml
 /_ReSharper.Caches/
 
+dotCover.Output
+dotCover.Output.html
+
 .idea/
 
 .sonarqube/

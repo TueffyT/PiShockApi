@@ -1,0 +1,8 @@
+version: "1.0"
+profile:
+  name: qodana.starter
+exclude:
+  - name: ConvertToPrimaryConstructor
+  - name: UnusedAutoPropertyAccessor.Global
+dotnet:
+  solution: PiShockApi.sln

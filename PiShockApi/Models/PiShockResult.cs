@@ -14,10 +14,5 @@
             get;
             set;
         }
-
-        public void Deconstruct( out bool IsSuccessful, out string Message) {
-            IsSuccessful = this.IsSuccessful;
-            Message = this.Message;
-        }
     }
 }

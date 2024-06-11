@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-
-namespace PiShockApi.Tests {
+﻿namespace PiShockApi.Tests {
     public class ApiClientTest : IClassFixture<PiShockFixture> {
         private PiShockFixture _piShockFixture;
 
